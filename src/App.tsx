@@ -1,4 +1,5 @@
 import React from 'react';
+import { Provider } from 'react-redux';
 import {
   ApolloClient, InMemoryCache, ApolloProvider, createHttpLink,
 } from '@apollo/client';
@@ -10,6 +11,7 @@ import Dashboard from './pages/Dashboard';
 import Header from './components/Header';
 import Wrapper from './components/Wrapper';
 // import NowWhat from './components/NowWhat';
+import store from './store';
 
 const httpLink = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
@@ -35,17 +37,19 @@ const theme = createTheme({
 });
 
 const App = () => (
-  <ApolloProvider client={client}>
-    <MuiThemeProvider theme={theme}>
-      <CssBaseline />
-      <Wrapper>
-        <Header />
-        {/* <NowWhat /> */}
-        <Dashboard />
-        <ToastContainer />
-      </Wrapper>
-    </MuiThemeProvider>
-  </ApolloProvider>
+  <Provider store={store}>
+    <ApolloProvider client={client}>
+      <MuiThemeProvider theme={theme}>
+        <CssBaseline />
+        <Wrapper>
+          <Header />
+          {/* <NowWhat /> */}
+          <Dashboard />
+          <ToastContainer />
+        </Wrapper>
+      </MuiThemeProvider>
+    </ApolloProvider>
+  </Provider>
 );
 
 export default App;

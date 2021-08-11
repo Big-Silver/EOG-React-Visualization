@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import MultiSelect from '../components/MultiSelect';
 import MeasureCard from '../components/MeasureCard';
 import MultiChart from '../components/MultiChart';
+import { useAppDispatch } from '../store/hooks';
+import Actions from '../store/actions';
 
 interface MainProps {}
 
@@ -26,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard: React.FC<MainProps> = () => {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(Actions.getMetrics());
+  }, []);
 
   return (
     <Container className={classes.root} maxWidth="xl">
