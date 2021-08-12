@@ -1,12 +1,24 @@
 import React from 'react';
 import Select from 'react-select';
+import { Metrics } from '../types/interfaces/Metrics';
 
-const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' },
-];
+export interface SelectProps {
+  data?: Metrics[];
+  onChange: (list: Metrics[]) => void;
+}
 
-const MultiSelect = () => <Select isMulti options={options} />;
+const MultiSelect: React.FC<SelectProps> = ({ data = [], onChange }) => {
+  const handleChange = (e: any) => {
+    onChange(e);
+  };
+
+  return (
+    <Select
+      isMulti
+      options={data}
+      onChange={handleChange}
+    />
+  );
+};
 
 export default MultiSelect;

@@ -1,30 +1,30 @@
-import { configActions, ConfigState } from '.';
+import { metricsActions, MetricsState } from '.';
 import { AppDispatch } from '..';
 import { Metrics } from '../../types/interfaces/Metrics';
 import { Measurement } from '../../types/interfaces/Measurement';
-import { configToEogObject } from '../../utils/config-mapping';
+import { metricsToEogObject } from '../../utils/metrics-mapping';
 
-const sendSettingsCommand = (config: Partial<ConfigState>) => ({
+const sendSettingsCommand = (metrics: Partial<MetricsState>) => ({
   method: 'set_plugin_setting',
-  params: configToEogObject(config),
+  params: metricsToEogObject(metrics),
 });
 
 const updateMetrics = (value: Metrics[]) => async (dispatch: AppDispatch) => {
-  dispatch(configActions.setMetics(value));
+  dispatch(metricsActions.setMetrics(value));
   sendSettingsCommand({
     metrics: value,
   });
 };
 
 const updateMeasurement = (value: Measurement[]) => async (dispatch: AppDispatch) => {
-  dispatch(configActions.setMeasurement(value));
+  dispatch(metricsActions.setMeasurement(value));
   sendSettingsCommand({
     measurements: value,
   });
 };
 
 const combinedActions = {
-  ...configActions,
+  ...metricsActions,
   updateMetrics,
   updateMeasurement,
 };

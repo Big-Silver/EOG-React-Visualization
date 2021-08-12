@@ -1,18 +1,9 @@
-import configActions from './config/actions';
-import { AppDispatch } from '.';
-
-const getMetrics = () => async (dispatch: AppDispatch) => {
-  try {
-    dispatch(configActions.setMetics([{ name: 'test', value: 'test' }]));
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err);
-  }
-};
+import metricsActions from './metrics/actions';
+// import { AppDispatch } from '.';
+// import { Metrics } from '../types/interfaces/Metrics';
 
 const combinedActions = {
-  ...configActions,
-  getMetrics,
+  ...metricsActions,
 };
 
 export default combinedActions;

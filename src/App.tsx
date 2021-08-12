@@ -1,8 +1,10 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import {
-  ApolloClient, InMemoryCache, ApolloProvider, createHttpLink,
+  ApolloClient, InMemoryCache, ApolloProvider, split, createHttpLink,
 } from '@apollo/client';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { WebSocketLink } from '@apollo/client/link/ws';
 import { ToastContainer } from 'react-toastify';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,8 +19,24 @@ const httpLink = createHttpLink({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
 });
 
+const wsLink = new WebSocketLink({
+  uri: process.env.REACT_APP_GRAPHQL_SUBSCRIBE_ENDPOINT!,
+  options: {
+    reconnect: true,
+  },
+});
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
+  },
+  wsLink,
+  httpLink,
+);
+
 const client = new ApolloClient({
-  link: httpLink,
+  link: splitLink,
   cache: new InMemoryCache(),
 });
 

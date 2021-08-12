@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { configReducer } from './config';
+import { metricsReducer } from './metrics';
 
 const store = configureStore({
   reducer: {
-    config: configReducer,
+    metrics: metricsReducer,
   },
   devTools: true,
 });

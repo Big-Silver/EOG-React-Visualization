@@ -1,4 +1,11 @@
+import { Measurement } from './Measurement';
+
 export interface Metrics {
-  name: string;
+  label: string;
   value: string;
+}
+
+export interface RealtimeMetric {
+  metric: string;
+  measurement: Measurement
 }
