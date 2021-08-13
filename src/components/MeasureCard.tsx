@@ -10,14 +10,21 @@ const useStyles = makeStyles({
   },
 });
 
-const MeasureCard = () => {
+interface CardProps {
+  data?: any;
+}
+
+const MeasureCard: React.FC<CardProps> = ({ data }) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h5" component="h2">
-          test
+          {data.value}
+        </Typography>
+        <Typography variant="body2" component="p">
+          {data.metric}
         </Typography>
       </CardContent>
     </Card>

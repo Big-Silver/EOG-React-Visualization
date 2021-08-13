@@ -2,7 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import { Metrics } from '../types/interfaces/Metrics';
 
-export interface SelectProps {
+interface SelectProps {
   data?: Metrics[];
   onChange: (list: Metrics[]) => void;
 }

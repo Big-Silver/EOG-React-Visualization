@@ -1,20 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { assignActionCreator } from '../../utils/redux';
 import { Metrics, RealtimeMetric } from '../../types/interfaces/Metrics';
-import { Measurement } from '../../types/interfaces/Measurement';
+import { MetricMeasurement } from '../../types/interfaces/Measurement';
 
 export interface MetricsState {
   metrics: Metrics[];
   selectedMetrics: Metrics[];
   realtimeMetrics: RealtimeMetric[];
-  measurements: Measurement[];
+  metricMeasurements: MetricMeasurement[];
 }
 
 const initialState: MetricsState = {
   metrics: [],
   selectedMetrics: [],
   realtimeMetrics: [],
-  measurements: [],
+  metricMeasurements: [],
 };
 
 export const metricsSlice = createSlice({
@@ -24,7 +24,7 @@ export const metricsSlice = createSlice({
     setMetrics: assignActionCreator<Metrics[]>('metrics'),
     setSelectedMetrics: assignActionCreator<Metrics[]>('selectedMetrics'),
     setRealtimeMetrics: assignActionCreator<RealtimeMetric[]>('realtimeMetrics'),
-    setMeasurement: assignActionCreator<Measurement[]>('measurement'),
+    setMetricMeasurements: assignActionCreator<MetricMeasurement[]>('metricMeasurements'),
   },
 });
 

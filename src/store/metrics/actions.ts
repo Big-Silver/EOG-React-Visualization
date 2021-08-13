@@ -1,7 +1,7 @@
 import { metricsActions, MetricsState } from '.';
 import { AppDispatch } from '..';
 import { Metrics } from '../../types/interfaces/Metrics';
-import { Measurement } from '../../types/interfaces/Measurement';
+import { MetricMeasurement } from '../../types/interfaces/Measurement';
 import { metricsToEogObject } from '../../utils/metrics-mapping';
 
 const sendSettingsCommand = (metrics: Partial<MetricsState>) => ({
@@ -16,17 +16,17 @@ const updateMetrics = (value: Metrics[]) => async (dispatch: AppDispatch) => {
   });
 };
 
-const updateMeasurement = (value: Measurement[]) => async (dispatch: AppDispatch) => {
-  dispatch(metricsActions.setMeasurement(value));
+const updateMetricMeasurement = (value: MetricMeasurement[]) => async (dispatch: AppDispatch) => {
+  dispatch(metricsActions.setMetricMeasurements(value));
   sendSettingsCommand({
-    measurements: value,
+    metricMeasurements: value,
   });
 };
 
 const combinedActions = {
   ...metricsActions,
   updateMetrics,
-  updateMeasurement,
+  updateMetricMeasurement,
 };
 
 export default combinedActions;

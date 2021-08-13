@@ -16,3 +16,17 @@ export const METRICS_SUBSCRIPTION = gql`
     }
   }
 `;
+
+export const GET_MULTI_MEASUREMENTS = gql`
+  query GetMultipleMeasurements($input: [MeasurementQuery!]!) {
+    getMultipleMeasurements(input: $input) {
+      metric
+      measurements {
+        metric
+        value
+        at
+        unit
+      }
+    }
+  }
+`;
