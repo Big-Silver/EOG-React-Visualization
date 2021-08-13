@@ -12,7 +12,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Dashboard from './pages/Dashboard';
 import Header from './components/Header';
 import Wrapper from './components/Wrapper';
-// import NowWhat from './components/NowWhat';
 import store from './store';
 
 const httpLink = createHttpLink({
@@ -61,7 +60,6 @@ const App = () => (
         <CssBaseline />
         <Wrapper>
           <Header />
-          {/* <NowWhat /> */}
           <Dashboard />
           <ToastContainer />
         </Wrapper>

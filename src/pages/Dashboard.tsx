@@ -123,7 +123,7 @@ const Dashboard: React.FC<MainProps> = () => {
     if (mData.metrics.length) {
       const mVariables = mData.metrics.map((m: Metrics) => ({
         metricName: m.value,
-        after: Date.now() - 1800000,
+        after: Date.now() - (30 * 60 * 1000),
         before: Date.now(),
       }));
 
