@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLazyQuery, useSubscription } from '@apollo/client';
+import { toast } from 'react-toastify';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import ClipLoader from 'react-spinners/ClipLoader';
 import MultiSelect from '../components/MultiSelect';
 import MeasureCard from '../components/MeasureCard';
 import MultiChart from '../components/MultiChart';
@@ -12,6 +14,7 @@ import { getMetrics } from '../store/selectors';
 import { GET_METRICS, METRICS_SUBSCRIPTION, GET_MULTI_MEASUREMENTS } from '../graphql/queries';
 import { camelize } from '../utils/index';
 import { Metrics, RealtimeMetric } from '../types/interfaces/Metrics';
+import { MetricMeasurement } from '../types/interfaces/Measurement';
 
 interface MainProps {}
 
@@ -30,6 +33,16 @@ const useStyles = makeStyles((theme) => ({
   },
   chart: {
     height: 'calc(100vh - 200px)',
+  },
+  loading: {
+    position: 'fixed',
+    width: '100%',
+    height: '100vh',
+    top: 0,
+    left: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }));
 
@@ -72,7 +85,7 @@ const Dashboard: React.FC<MainProps> = () => {
       const multiMetrics = mulMeticMeasurements;
       let flag = false;
       for (let i = 0; i < rData.length; i += 1) {
-        multiMetrics.map((m) => {
+        multiMetrics.map((m: MetricMeasurement) => {
           const measurements = JSON.parse(JSON.stringify(m.measurements));
           if (rData[i].metric === m.metric) {
             const tempMeasurement = JSON.parse(JSON.stringify(rData[i].measurement));
@@ -80,7 +93,7 @@ const Dashboard: React.FC<MainProps> = () => {
             measurements.shift();
           }
           return {
-            metrics: m.metrics,
+            metrics: m.metric,
             measurements,
           };
         });
@@ -96,9 +109,8 @@ const Dashboard: React.FC<MainProps> = () => {
         });
       }
       dispatch(Actions.setRealtimeMetrics(rData));
-      dispatch(Actions.setMetricMeasurements(multiMetrics));
     }
-  }, [subData.loading, subData.error, JSON.stringify(subData.data)]);
+  }, [subData.loading, subData.error, subData.data]);
 
   useEffect(() => {
     if (multiData.data && !multiData.loading && !multiData.error && multiData.called) {
@@ -122,7 +134,7 @@ const Dashboard: React.FC<MainProps> = () => {
 
   useEffect(() => {
     setMulMeticMeasurements(JSON.parse(JSON.stringify(mData.metricMeasurements)));
-  }, [JSON.stringify(mData.metricMeasurements)]);
+  }, [mData.metricMeasurements]);
 
   useEffect(() => {
     const selectedList = mData.selectedMetrics.map((m: Metrics) => m.value);
@@ -132,19 +144,28 @@ const Dashboard: React.FC<MainProps> = () => {
     setSelectedMetrics(JSON.parse(JSON.stringify(selectedRealList)));
   }, [mData.realtimeMetrics]);
 
-  const realChartData = React.useMemo(() => mulMeticMeasurements.filter((m) => {
-    for (let i = 0; i < selectedMetrics.length; i += 1) {
-      if (selectedMetrics[i].metric === m.metric) return true;
+  const realChartData = React.useMemo(() => mulMeticMeasurements.filter((m: MetricMeasurement) => {
+    const tempSelectedM: MetricMeasurement[] = selectedMetrics;
+    for (let i = 0; i < tempSelectedM.length; i += 1) {
+      if (tempSelectedM[i].metric === m.metric) return true;
     }
     return false;
   }), [selectedMetrics, mulMeticMeasurements]);
 
   if (gData.called && gData.loading) {
-    return <div>loading</div>;
+    return (
+      <div className={classes.loading}>
+        <ClipLoader color="#36d7b7" size={150} />
+      </div>
+    );
   }
 
-  if (gData.error) {
-    return <div>error</div>;
+  if (gData.error || multiData.error) {
+    toast('Something went wrong!', { type: 'error' });
+  }
+
+  if (subData.error) {
+    toast('Websoket was disconnected!, trying now.', { type: 'warning' });
   }
 
   const changeMultiSelect = (e: Metrics[]) => {

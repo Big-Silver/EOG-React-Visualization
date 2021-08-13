@@ -1,6 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Line } from 'react-chartjs-2';
+import { getRandomColor } from '../utils/index';
+import { MetricMeasurement, Measurement } from '../types/interfaces/Measurement';
 
 interface ChartProps {
   data?: any;
@@ -30,21 +32,22 @@ const MultiChart: React.FC<ChartProps> = ({ data }) => {
 
   const items = React.useMemo(
     () => {
-      const labels = data[0].measurements.map((m: any) => {
+      const labels = data[0].measurements.map((m: Measurement) => {
         const time = new Date(m.at);
         return `${time.getHours()} : ${time.getMinutes()}`;
       });
-      const datasets = data.map((d: any, idx: number) => {
+      const datasets = data.map((d: MetricMeasurement) => {
         const label = d.metric;
-        const values = d.measurements.map((m: any) => m.value);
+        const values = d.measurements.map((m: Measurement) => m.value);
+        const color = getRandomColor();
 
         return {
           label,
           data: values,
           fill: false,
           yAxisID: `y-axis-${d.measurements[0].unit}`,
-          backgroundColor: `rgb(${255 / idx}, ${255 % idx}, ${255 / idx})`,
-          borderColor: `rgba(${255 / idx}, ${255 / idx}, ${255 / idx}, 0.2)`,
+          backgroundColor: color,
+          borderColor: `${color}33`,
         };
       });
 
